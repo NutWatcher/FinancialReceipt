@@ -1,7 +1,8 @@
-import * as React from 'react';
+import React from 'react';
+import styles from './ProductList.css';
 import { Table, Popconfirm, Button } from 'antd';
 
-const ProductList = ({ onDelete, products }) => {
+let ProductList = ({ onDelete, products }) => {
   const columns = [{
     title: 'Name',
     dataIndex: 'name',

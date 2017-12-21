@@ -1,16 +1,38 @@
 import React from 'react';
-import { Router, Route, Switch } from 'dva/router';
+import { Router, Route, Switch, Redirect } from 'dva/router';
+import dynamic from 'dva/dynamic'
+import App from './components/App/App'
+
 import IndexPage from './routes/IndexPage';
-import Products from './routes/Products';
-function RouterConfig({ history }) {
+ import Products from './routes/Products';
+// function RouterConfig({ history }) {
+//   return (
+//     <Router history={history}>
+//       <Switch>
+//         <Route path="/" exact component={Products} />
+//         <Route path="/products" exact component={Products} />
+//       </Switch>
+//     </Router>
+//   );
+// }
+
+const Routers = function ({ history, app }) {
+  const routes = [
+    {
+      path: '/products',
+      models: () => [import('./models/products')],
+      component: () => import('./components/ProductList/ProductList'),
+    }];
   return (
     <Router history={history}>
-      <Switch>
-        <Route path="/" exact component={Products} />
-        <Route path="/products" exact component={Products} />
-      </Switch>
+      <App>
+        <Switch>
+          <Route exact path="/" render={() => (<Redirect to="/products" />)} />
+          <Route path="/products" exact component={Products} />
+        </Switch>
+      </App>
     </Router>
-  );
-}
-
-export default RouterConfig;
+  )
+};
+//export default RouterConfig;
+export default Routers;

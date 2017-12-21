@@ -1,0 +1,52 @@
+:global {
+  .ant-menu-dark,
+  .ant-menu-dark .ant-menu-sub {
+    color: #999;
+  }
+
+  .ant-menu-root {
+    height: ~"calc(100vh - 24px)";
+    overflow-x: hidden;
+    border-right: none;
+
+    &::-webkit-scrollbar-thumb {
+      background-color: transparent;
+    }
+
+    &:hover {
+      &::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.2);
+      }
+    }
+
+    &.ant-menu-vertical {
+      .ant-menu-sub {
+        height: 0;
+        opacity: 0;
+        transition: none;
+      }
+
+      .ant-menu-submenu-active {
+        .ant-menu-sub {
+          height: auto;
+          opacity: 1;
+        }
+      }
+    }
+  }
+}
+.logo {
+  text-align: center;
+  height: 20px;
+  line-height: 20px;
+  cursor: pointer;
+  margin: 8px 0;
+  overflow: hidden;
+
+  span {
+    vertical-align: text-bottom;
+    font-size: 16px;
+    text-transform: uppercase;
+    display: inline-block;
+  }
+}
