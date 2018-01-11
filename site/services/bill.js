@@ -1,10 +1,10 @@
 let BillList = [];
 class Bill {
     constructor(){}
-    static AddBill = (param) => {
+    static AddBill(param) {
         BillList.push(param);
     };
-    static GetBills = () => {
+    static GetBills() {
         return BillList ;
     };
 }

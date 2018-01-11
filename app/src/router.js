@@ -4,18 +4,9 @@ import dynamic from 'dva/dynamic'
 import App from './components/App/App'
 
 import IndexPage from './routes/IndexPage';
+import Welcome from './routes/Welcome';
 import Products from './routes/Products';
 import BillManage from './routes/BillManage/index';
-// function RouterConfig({ history }) {
-//   return (
-//     <Router history={history}>
-//       <Switch>
-//         <Route path="/" exact component={Products} />
-//         <Route path="/products" exact component={Products} />
-//       </Switch>
-//     </Router>
-//   );
-// }
 
 const Routers = function ({ history, app }) {
   const routes = [
@@ -28,8 +19,8 @@ const Routers = function ({ history, app }) {
     <Router history={history}>
       <App>
         <Switch>
-          <Route exact path="/" render={() => (<Redirect to="/products" />)} />
-          <Route path="/products" exact component={Products} />
+          <Route exact path="/" render={() => (<Redirect to="/Welcome" />)} />
+          <Route path="/Welcome" exact component={Welcome} />
           <Route path="/billManage" exact component={BillManage} />
         </Switch>
       </App>
