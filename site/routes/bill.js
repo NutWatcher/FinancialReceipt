@@ -8,9 +8,23 @@ router.get('/', function(req, res, next) {
         billList: billList
     });
 });
-router.post('/add', function(req, res, next) {
-    console.log(req.body);
-    res.render('index', { title: 'Express11' });
+router.post('/', async (req, res, next) => {
+    try {
+        console.log(req.body);
+        await Bill.AddBill(req.body);
+        return res.json({
+            code: 1001,
+            msg: "已增加",
+            result: {}
+        });
+    }
+    catch (err){
+        return res.json({
+            code: 4004,
+            msg: err.toString() || "未知错误",
+            result: {}
+        });
+    }
 });
 
 module.exports = router;

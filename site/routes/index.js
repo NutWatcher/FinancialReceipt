@@ -9,5 +9,5 @@ router.get('/', function(req, res, next) {
 
 module.exports = function (app) {
     app.use('/', router) ;
-    app.use('/bill', bill) ;
+    app.use('/bills', bill) ;
 };

@@ -1,5 +1,5 @@
-const APIV1 = '/api/v1'
-const APIV2 = '/api/v2'
+const APIV1 = '/api/v1';
+const APIV2 = '/api/v2';
 
 module.exports = {
   name: '财务管理',

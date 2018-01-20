@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import styles from './BillForm.less';
 import { Modal, Button } from 'antd';
 import { Form, Input, Switch, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, AutoComplete, Radio  } from 'antd';
@@ -18,7 +18,7 @@ const formItemTwoLayout = {
   wrapperCol: { span: 12 },
 };
 
-class CollectionForm extends React.Component{
+class CollectionForm extends Component{
   constructor(props){
     super(props);
     this.state = {
@@ -34,7 +34,7 @@ class CollectionForm extends React.Component{
       RaxDistribution: v,
       showOutMoney: false,
       showDeductible: false
-    }
+    };
     if (v == "a"){
       param.showOutMoney = true ;
     }
@@ -58,9 +58,9 @@ class CollectionForm extends React.Component{
         <Form layout="horizontal">
           <Row gutter={8}>
             <Col span={10} >
-              <FormItem  label="公司名称1" {...formItemTwoLayout}>
+              <FormItem  label="公司名称" {...formItemTwoLayout}>
                 {getFieldDecorator('company', {
-                  rules: [{ required: true, message: '请输入公司名称!' }],
+                  rules: [{ required: true, message: '请输入..' }],
                 })(
                   <Input />
                 )}
@@ -68,8 +68,8 @@ class CollectionForm extends React.Component{
             </Col>
             <Col span={10} >
               <FormItem label="部门" {...formItemTwoLayout}>
-                {getFieldDecorator('billNumber', {
-                  rules: [{ required: true, message: '请输入发票号码!' }],
+                {getFieldDecorator('department', {
+                  rules: [{ required: true, message: '请输入..' }],
                 })(<Input  />)}
               </FormItem>
             </Col>
@@ -77,15 +77,15 @@ class CollectionForm extends React.Component{
           <Row gutter={8}>
             <Col span={10} >
               <FormItem label="事项" {...formItemTwoLayout}>
-                {getFieldDecorator('billNumber', {
-                  rules: [{ required: true, message: '请输入发票号码!' }],
+                {getFieldDecorator('matter', {
+                  rules: [{ required: true, message: '请输入..' }],
                 })(<Input  />)}
               </FormItem>
             </Col>
             <Col span={10} >
               <FormItem label="专业" {...formItemTwoLayout}>
-                {getFieldDecorator('billNumber', {
-                  rules: [{ required: true, message: '请输入发票号码!' }],
+                {getFieldDecorator('profession', {
+                  rules: [{ required: true, message: '请输入..' }],
                 })(<Input  />)}
               </FormItem>
             </Col>
@@ -94,13 +94,13 @@ class CollectionForm extends React.Component{
             <Col span={10} >
               <FormItem label="发票代码" {...formItemTwoLayout}>
                 {getFieldDecorator('billCode', {
-                  rules: [{ required: true, message: '请输入发票代码!' }],
+                  rules: [{ required: true, message: '请输入..' }],
                 })(<Input  />)}
               </FormItem></Col>
             <Col span={10} >
               <FormItem label="发票号码" {...formItemTwoLayout}>
                 {getFieldDecorator('billNumber', {
-                  rules: [{ required: true, message: '请输入发票号码!' }],
+                  rules: [{ required: true, message: '请输入..' }],
                 })(<Input  />)}
               </FormItem>
             </Col>
@@ -108,14 +108,14 @@ class CollectionForm extends React.Component{
           <Row gutter={8}>
             <Col span={10} >
               <FormItem label="金额" {...formItemTwoLayout}>
-                {getFieldDecorator('billCode', {
-                  rules: [{ required: true, message: '请输入发票代码!' }],
+                {getFieldDecorator('money', {
+                  rules: [{ required: true, message: '请输入..' }],
                 })(<Input  />)}
               </FormItem></Col>
             <Col span={10} >
               <FormItem label="税额" {...formItemTwoLayout}>
-                {getFieldDecorator('billNumber', {
-                  rules: [{ required: true, message: '请输入发票号码!' }],
+                {getFieldDecorator('rax', {
+                  rules: [{ required: true, message: '请输入..' }],
                 })(<Input  />)}
               </FormItem>
             </Col>
@@ -123,15 +123,15 @@ class CollectionForm extends React.Component{
           <Row gutter={8}>
             <Col span={10} >
               <FormItem label="税率" {...formItemTwoLayout}>
-                {getFieldDecorator('billNumber', {
-                  rules: [{ required: true, message: '请输入发票号码!' }],
+                {getFieldDecorator('raxRate', {
+                  rules: [{ required: true, message: '请输入..' }],
                 })(<Input  />)}
               </FormItem>
             </Col>
             <Col span={10} >
               <FormItem label="合计" {...formItemTwoLayout}>
-                {getFieldDecorator('billNumber', {
-                  rules: [{ required: true, message: '请输入发票号码!' }],
+                {getFieldDecorator('total', {
+                  rules: [{ required: true, message: '请输入..' }],
                 })(<Input  />)}
               </FormItem>
             </Col>
@@ -150,15 +150,15 @@ class CollectionForm extends React.Component{
               <Row gutter={8}>
                 <Col span={10} >
                   <FormItem label="转出金额" {...formItemTwoLayout}>
-                    {getFieldDecorator('billNumber', {
-                      rules: [{ required: true, message: '请输入发票号码!' }],
+                    {getFieldDecorator('taxTurnOut', {
+                      rules: [{ required: true, message: '请输入..' }],
                     })(<Input  />)}
                   </FormItem>
                 </Col>
                 <Col span={10} >
                   <FormItem label="转出科目" {...formItemTwoLayout}>
-                    {getFieldDecorator('billNumber', {
-                      rules: [{ required: true, message: '请输入发票号码!' }],
+                    {getFieldDecorator('taxTurnOutSubject', {
+                      rules: [{ required: true, message: '请输入..' }],
                     })(<Input  />)}
                   </FormItem>
                 </Col>
@@ -170,8 +170,8 @@ class CollectionForm extends React.Component{
               <Row gutter={8}>
                 <Col span={10} >
                   <FormItem label="抵扣金额" {...formItemTwoLayout}>
-                    {getFieldDecorator('billNumber', {
-                      rules: [{ required: true, message: '请输入发票号码!' }],
+                    {getFieldDecorator('taxDeduction', {
+                      rules: [{ required: true, message: '请输入..' }],
                     })(<Input />)}
                   </FormItem>
                 </Col>
@@ -179,8 +179,8 @@ class CollectionForm extends React.Component{
                   {
                     this.state.showDeductible & this.state.showOutMoney ?
                       <FormItem label="比例" {...formItemTwoLayout}>
-                        {getFieldDecorator('billNumber', {
-                          rules: [{ required: true, message: '请输入发票号码!' }],
+                        {getFieldDecorator('TurnOutDeductionRate', {
+                          rules: [{ required: true, message: '请输入..' }],
                         })(<Input  />)}
                       </FormItem>
                     : null
@@ -191,7 +191,7 @@ class CollectionForm extends React.Component{
           }
 
           <FormItem  label="备注" {...{...formItemLayout}} >
-            {getFieldDecorator('company', {})(
+            {getFieldDecorator('remark', {})(
               <TextArea />
             )}
           </FormItem>
@@ -203,31 +203,32 @@ class CollectionForm extends React.Component{
 
 const CollectionCreateForm = Form.create()(CollectionForm);
 
-class BillForm extends React.Component {
+class BillForm extends Component{
   state = {
     visible: false,
   };
   showModal = () => {
     this.setState({ visible: true });
-  }
+  };
   handleCancel = () => {
     this.setState({ visible: false });
-  }
+  };
   handleCreate = () => {
+    const { onOk } = this.props;
     const form = this.form;
     form.validateFields((err, values) => {
       if (err) {
         return;
       }
-
       console.log('Received values of form: ', values);
       form.resetFields();
+      onOk(values);
       this.setState({ visible: false });
     });
-  }
+  };
   saveFormRef = (form) => {
     this.form = form;
-  }
+  };
   render() {
     return (
       <div>
@@ -242,174 +243,4 @@ class BillForm extends React.Component {
     );
   }
 }
-
 export default BillForm;
-
-
-
-// const CollectionCreateForm = Form.create()(
-//   (props) => {
-//
-//     const { visible, onCancel, onCreate, form } = props;
-//     const { getFieldDecorator } = form;
-//     const formItemLayout = {
-//       labelCol: { span: 5 },
-//       wrapperCol: { span: 15 },
-//     };
-//     const formItemTwoLayout = {
-//       labelCol: { span: 12 },
-//       wrapperCol: { span: 12 },
-//     };
-//     changeRaxDistribution = (e) => {
-//       console.log('radio checked', e.target.value);
-//       this.setState({
-//         value: e.target.value,
-//       });
-//     };
-//     return (
-//       <Modal
-//         width={900}
-//         visible={visible}
-//         style={{ top: 20 }}
-//         title="新增台账"
-//         okText="新增"
-//         onCancel={onCancel}
-//         onOk={onCreate}
-//       >
-//         <Form layout="horizontal">
-//
-//           <Row gutter={8}>
-//             <Col span={10} >
-//               <FormItem  label="公司名称1" {...formItemTwoLayout}>
-//                 {getFieldDecorator('company', {
-//                   rules: [{ required: true, message: '请输入公司名称!' }],
-//                 })(
-//                   <Input />
-//                 )}
-//               </FormItem>
-//             </Col>
-//             <Col span={10} >
-//               <FormItem label="部门" {...formItemTwoLayout}>
-//                 {getFieldDecorator('billNumber', {
-//                   rules: [{ required: true, message: '请输入发票号码!' }],
-//                 })(<Input  />)}
-//               </FormItem>
-//             </Col>
-//           </Row>
-//           <Row gutter={8}>
-//             <Col span={10} >
-//               <FormItem label="事项" {...formItemTwoLayout}>
-//                 {getFieldDecorator('billNumber', {
-//                   rules: [{ required: true, message: '请输入发票号码!' }],
-//                 })(<Input  />)}
-//               </FormItem>
-//             </Col>
-//             <Col span={10} >
-//               <FormItem label="专业" {...formItemTwoLayout}>
-//                 {getFieldDecorator('billNumber', {
-//                   rules: [{ required: true, message: '请输入发票号码!' }],
-//                 })(<Input  />)}
-//               </FormItem>
-//             </Col>
-//           </Row>
-//           <Row gutter={8}>
-//             <Col span={10} >
-//               <FormItem label="发票代码" {...formItemTwoLayout}>
-//                 {getFieldDecorator('billCode', {
-//                   rules: [{ required: true, message: '请输入发票代码!' }],
-//                 })(<Input  />)}
-//               </FormItem></Col>
-//             <Col span={10} >
-//               <FormItem label="发票号码" {...formItemTwoLayout}>
-//                 {getFieldDecorator('billNumber', {
-//                   rules: [{ required: true, message: '请输入发票号码!' }],
-//                 })(<Input  />)}
-//               </FormItem>
-//             </Col>
-//           </Row>
-//           <Row gutter={8}>
-//             <Col span={10} >
-//               <FormItem label="金额" {...formItemTwoLayout}>
-//                 {getFieldDecorator('billCode', {
-//                   rules: [{ required: true, message: '请输入发票代码!' }],
-//                 })(<Input  />)}
-//               </FormItem></Col>
-//             <Col span={10} >
-//               <FormItem label="税额" {...formItemTwoLayout}>
-//                 {getFieldDecorator('billNumber', {
-//                   rules: [{ required: true, message: '请输入发票号码!' }],
-//                 })(<Input  />)}
-//               </FormItem>
-//             </Col>
-//           </Row>
-//           <Row gutter={8}>
-//             <Col span={10} >
-//               <FormItem label="税率" {...formItemTwoLayout}>
-//                 {getFieldDecorator('billNumber', {
-//                   rules: [{ required: true, message: '请输入发票号码!' }],
-//                 })(<Input  />)}
-//               </FormItem>
-//             </Col>
-//             <Col span={10} >
-//               <FormItem label="合计" {...formItemTwoLayout}>
-//                 {getFieldDecorator('billNumber', {
-//                   rules: [{ required: true, message: '请输入发票号码!' }],
-//                 })(<Input  />)}
-//               </FormItem>
-//             </Col>
-//           </Row>
-//           <FormItem label="税额分配" {...formItemLayout}>
-//             {getFieldDecorator('billNumber', {
-//               rules: [{ required: true, message: '请输入发票号码!' }],
-//             })(
-//               <RadioGroup onChange={this.changeRaxDistribution} value={this.state.RaxDistribution}>
-//                 <RadioButton  value="a">全抵扣</RadioButton >
-//                 <RadioButton  value="b">全转出</RadioButton >
-//                 <RadioButton  value="c">自定义</RadioButton >
-//                 <RadioButton  value="d">按比例</RadioButton >
-//               </RadioGroup>
-//             )}
-//           </FormItem>
-//
-//           <Row gutter={8}>
-//             <Col span={10} >
-//               <FormItem label="转出金额" {...formItemTwoLayout}>
-//                 {getFieldDecorator('billNumber', {
-//                   rules: [{ required: true, message: '请输入发票号码!' }],
-//                 })(<Input  />)}
-//               </FormItem>
-//             </Col>
-//             <Col span={10} >
-//               <FormItem label="转出科目" {...formItemTwoLayout}>
-//                 {getFieldDecorator('billNumber', {
-//                   rules: [{ required: true, message: '请输入发票号码!' }],
-//                 })(<Input  />)}
-//               </FormItem>
-//             </Col>
-//           </Row>
-//           <Row gutter={8}>
-//             <Col span={10} >
-//               <FormItem label="抵扣金额" {...formItemTwoLayout}>
-//                 {getFieldDecorator('billNumber', {
-//                   rules: [{ required: true, message: '请输入发票号码!' }],
-//                 })(<Input />)}
-//               </FormItem>
-//             </Col>
-//             <Col span={10} >
-//               <FormItem label="比例" {...formItemTwoLayout}>
-//                 {getFieldDecorator('billNumber', {
-//                   rules: [{ required: true, message: '请输入发票号码!' }],
-//                 })(<Input  />)}
-//               </FormItem>
-//             </Col>
-//           </Row>
-//           <FormItem  label="备注" {...{...formItemLayout}} >
-//             {getFieldDecorator('company', {})(
-//               <TextArea />
-//             )}
-//           </FormItem>
-//         </Form>
-//       </Modal>
-//     );
-//   }
-// );
