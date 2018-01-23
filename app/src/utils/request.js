@@ -21,10 +21,20 @@ function checkStatus(response) {
  * @param  {object} [options] The options we want to pass to "fetch"
  * @return {object}           An object containing either "data" or "err"
  */
-export default function request(url, options) {
-  return fetch(url, options)
-    .then(checkStatus)
-    .then(parseJSON)
-    .then(data => ({ data }))
-    .catch(err => ({ err }));
+export default async function request(url, options) {
+
+  const response = await fetch(url, options);
+  checkStatus(response);
+  const data = await response.json();
+  if (data.code != "1001"){
+    const error = new Error(data.code);
+    error.msg = data.msg;
+    throw error;
+  }
+  const ret = {
+    data,
+    headers: {},
+  };
+  return ret;
+
 }

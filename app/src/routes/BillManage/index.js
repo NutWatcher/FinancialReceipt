@@ -45,7 +45,7 @@ const BillManage = ({ dispatch, list: dataSource, loading, total, page: current 
           </div>
         </Col>
       </Row>
-      <List />
+      <List listData = {dataSource}/>
     </Page>
   );
 };

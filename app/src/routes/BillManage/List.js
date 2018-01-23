@@ -3,7 +3,7 @@ import { Table, Icon, Divider , Dropdown, Menu, Button } from 'antd'
 
 import styles from './List.less';
 
-const List = ({ }) => {
+const List = ({ listData}) => {
   const dropMenu = (
     <Dropdown overlay={
       <Menu >
@@ -17,19 +17,19 @@ const List = ({ }) => {
     </Dropdown>
   );
   const columns = [
-    {title: '单位', dataIndex: 'company', key: 'company', render: text => <a href="#">{text}</a>},
+    {title: '单位', dataIndex: 'companyId', key: 'companyId', render: text => <a href="#">{text}</a>},
     {title: '发票代码', dataIndex: 'billCode', key: 'billCode'},
     {title: '发票号码', dataIndex: 'billNumber', key: 'billNumber'},
     {title: '金额', dataIndex: 'money', key: 'money'},
     {title: '税率', dataIndex: 'taxRate', key: 'taxRate'},
-    {title: '税额', dataIndex: 'taxPaid', key: 'taxPaid'},
+    {title: '税额', dataIndex: 'tax', key: 'tax'},
     {title: '合计', dataIndex: 'total', key: 'total'},
     {title: '入账金额', dataIndex: 'moneyIn', key: 'moneyIn'},
-    {title: '抵扣', dataIndex: 'isDeductible', key: 'isDeductible'},
-    {title: '转出科目', dataIndex: 'outSubject', key: 'outSubject'},
-    {title: '部门', dataIndex: 'department', key: 'department'},
-    {title: '事项', dataIndex: 'item', key: 'item'},
-    {title: '来源', dataIndex: 'source', key: 'source'},
+    {title: '抵扣', dataIndex: 'taxDeduction', key: 'taxDeduction'},
+    {title: '转出科目', dataIndex: 'taxTurnOutSubject', key: 'taxTurnOutSubject'},
+    {title: '部门', dataIndex: 'departmentId', key: 'departmentId'},
+    {title: '来源', dataIndex: 'profession', key: 'profession'},
+    {title: '事项', dataIndex: 'matter', key: 'matter'},
     {title: '备注', dataIndex: 'remark', key: 'remark'},
     {
       title: '操作',
@@ -55,7 +55,7 @@ const List = ({ }) => {
     ];
   return (
     <div className={styles.list_wrap}>
-      <Table bordered scroll={{ x: '130%' }} columns={columns} dataSource={data} />
+      <Table bordered scroll={{ x: '130%' }} columns={columns} dataSource={listData} />
     </div>
   )
 };

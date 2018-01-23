@@ -1,25 +1,14 @@
 import request from '../utils/request';
 
 export function fetch({ page }) {
-  return request(`/api/users?_page=${page}&_limit=10`);
+  return request(`/api/bills?_page=${page}&_limit=10`);
 }
-
-export function remove(id) {
-  return request(`/api/users/${id}`, {
-    method: 'DELETE',
-  });
-}
-
-export function patch(id, values) {
-  return request(`/api/users/${id}`, {
-    method: 'PATCH',
-    body: JSON.stringify(values),
-  });
-}
-
 export function create(values) {
-  return request('/bills', {
+  return request('/api/bills', {
     method: 'POST',
+    headers:{
+      "Content-Type": "application/json"
+    },
     body: JSON.stringify(values),
   });
 }

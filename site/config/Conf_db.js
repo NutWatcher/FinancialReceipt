@@ -1,10 +1,10 @@
 var db_config = {
-    "host": "127.0.0.1",
+    "host": "10.140.26.246",
     "port": "3306",
-    "database": "financial_",
+    "database": "financial_receipt",
     "multipleStatements": "true",
-    "user": "baoguo",
-    "password": "p12cHANgepwD"
+    "user": "root",
+    "password": "proliant"
 };
 module.exports = {
     db_config: db_config

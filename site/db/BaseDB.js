@@ -1,18 +1,18 @@
 var moment = require('moment');
 var mysql = require('mysql');
-var dbConfig = require('../config/Conf_db.js').dataBase;
+var dbConfig = require('../config/Conf_db.js').db_config;
 var pool  = mysql.createPool({
-    "host": dbConfig.config.host,
-    "port": dbConfig.config.port,
-    "database": dbConfig.config.database,
-    "multipleStatements": dbConfig.config.multipleStatements||false,
-    "user": dbConfig.config.user,
-    "password": dbConfig.config.password,
-    "connectionLimit": dbConfig.config.connectionLimit||5
+    "host": dbConfig.host,
+    "port": dbConfig.port,
+    "database": dbConfig.database,
+    "multipleStatements": dbConfig.multipleStatements||false,
+    "user": dbConfig.user,
+    "password": dbConfig.password,
+    "connectionLimit": dbConfig.connectionLimit||5
 });
 exports.escape = function(data){
     return pool.escape(data) ;
-}
+};
 var queryDbStream = function (strSqls, cb, endCb) {
     var strSql = "" ;
     for ( var i = 0 ; i < strSqls.length ; i ++ ){

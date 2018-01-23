@@ -11,26 +11,39 @@ export default {
     add(state, param) {
       return state.filter(item => item.id !== id);
     },
-    save(state, { payload: { data: list, total, page } }) {
+    save(state, { payload: { billList: list, total, page } }) {
+      console.log("save in");
       return { ...state, list, total, page };
     }
   },
   effects: {
     *fetch({ payload: { page = 1 } }, { call, put }) {
-      const { data, headers } = yield call(billService.create, { page });
+      console.log("fetch in");
+      const { data, headers } = yield call(billService.fetch, { page });
       yield put({
         type: 'save',
         payload: {
-          data,
-          total: parseInt(headers['x-total-count'], 10),
-          page: parseInt(page, 10),
+          billList: data.billList,
+          total:null,
+          page:1
         },
       });
     },
     *create({ payload: values }, { call, put }) {
       console.log("create in");
-      yield call(billService.create, values);
-      yield put({ type: 'reload' });
+      let value = yield call(billService.create, values);
+      console.log(value);
+      //yield put({ type: 'globe/showSuccess', success: "添加成功" });
+      yield put({ type: 'fetch', payload:{page:1}});
+    }
+  },
+  subscriptions: {
+    setup({ dispatch, history }) {
+      history.listen(({ pathname }) => {
+        if (pathname === '/billManage') {
+          dispatch({type: 'fetch', payload:{page:1}});
+        }
+      });
     },
   }
 };
