@@ -3,7 +3,7 @@ import { Table, Icon, Divider , Dropdown, Menu, Button } from 'antd'
 
 import styles from './List.less';
 
-const List = ({ listData}) => {
+const List = ({ listData, updateHandler, deleteHandler}) => {
   const dropMenu = (
     <Dropdown overlay={
       <Menu >
@@ -16,6 +16,17 @@ const List = ({ listData}) => {
       </Button>
     </Dropdown>
   );
+  function MenuAction(e, value) {
+    console.log(e);
+    if (e.key == 1){
+      console.log("update");
+      updateHandler({id: value});
+    }
+    else if (e.key == 2){
+      console.log("delete");
+      deleteHandler({id: value});
+    }
+  };
   const columns = [
     {title: '单位', dataIndex: 'companyId', key: 'companyId', render: text => <a href="#">{text}</a>},
     {title: '发票代码', dataIndex: 'billCode', key: 'billCode'},
@@ -36,7 +47,16 @@ const List = ({ listData}) => {
       fixed: 'right',
       key: 'action',
       render: (text, record) => {
-        return dropMenu;
+        return <Dropdown overlay={
+          <Menu onClick={(e) => MenuAction(e, record.id)}>
+            <Menu.Item key="1">修改</Menu.Item>
+            <Menu.Item key="2">删除</Menu.Item>
+          </Menu>
+        }>
+          <Button style={{ marginLeft: 8 }}>
+            <Icon type="bars" /><Icon type="down" />
+          </Button>
+        </Dropdown>;
       },
   }];
   const data = [

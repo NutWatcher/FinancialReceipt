@@ -7,6 +7,11 @@ const app = dva({
   history: browserHistory,
   initialState: {
      bills: {
+       formList:{
+         departmentList:[],
+         taxTurnOutSubjectsList:[],
+         professionsList:[]
+       },
        list: [],
        total: null,
        page: null,

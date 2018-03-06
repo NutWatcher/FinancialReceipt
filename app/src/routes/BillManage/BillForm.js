@@ -17,7 +17,31 @@ const formItemTwoLayout = {
   labelCol: { span: 12 },
   wrapperCol: { span: 12 },
 };
-
+class SelectInput extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  handleSelectChange = (value) => {
+    this.props.onChange(value);
+  };
+  render() {
+    return (
+      <span>
+        <Select
+          value={this.props.value}
+          style={{ width: '100%' }}
+          onChange={this.handleSelectChange}
+        >
+          {
+            this.props.options.map((value , index) => {
+              return  <Option key={index} value={value.id}>{value.name}</Option>
+            })
+          }
+        </Select>
+      </span>
+    );
+  }
+}
 class CollectionForm extends Component{
   constructor(props){
     super(props);
@@ -48,8 +72,10 @@ class CollectionForm extends Component{
     this.setState(param);
   };
   render() {
-    const { visible, onCancel, onCreate, form } = this.props;
+    const { visible, onCancel, onCreate, form, formList } = this.props;
     const { getFieldDecorator } = form;
+    console.log("formlist");
+    console.log(formList);
     return (
       <Modal width={900} visible={visible} style={{ top: 20 }}
         title="新增台账" okText="新增"
@@ -69,8 +95,9 @@ class CollectionForm extends Component{
             <Col span={10} >
               <FormItem label="部门" {...formItemTwoLayout}>
                 {getFieldDecorator('department', {
+                  initialValue: null,
                   rules: [{ required: true, message: '请输入..' }],
-                })(<Input  />)}
+                })(<SelectInput options={formList.departmentsList}/>)}
               </FormItem>
             </Col>
           </Row>
@@ -86,7 +113,7 @@ class CollectionForm extends Component{
               <FormItem label="专业" {...formItemTwoLayout}>
                 {getFieldDecorator('profession', {
                   rules: [{ required: true, message: '请输入..' }],
-                })(<Input  />)}
+                })(<SelectInput options={formList.professionsList}/>)}
               </FormItem>
             </Col>
           </Row>
@@ -159,7 +186,7 @@ class CollectionForm extends Component{
                   <FormItem label="转出科目" {...formItemTwoLayout}>
                     {getFieldDecorator('taxTurnOutSubject', {
                       rules: [{ required: true, message: '请输入..' }],
-                    })(<Input  />)}
+                    })(<SelectInput options={formList.taxTurnOutSubjectsList}/>)}
                   </FormItem>
                 </Col>
               </Row>
@@ -230,10 +257,13 @@ class BillForm extends Component{
     this.form = form;
   };
   render() {
+    console.log("propsformlist");
+    console.log(this.props.formList);
     return (
       <div>
         <Button type="primary" onClick={this.showModal}><Icon type="plus" />新增</Button>
         <CollectionCreateForm
+          formList={this.props.formList}
           ref={this.saveFormRef}
           visible={this.state.visible}
           onCancel={this.handleCancel}

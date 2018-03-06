@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const bill = require('./bill');
+const department = require('./department');
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
@@ -10,4 +11,5 @@ router.get('/', function(req, res, next) {
 module.exports = function (app) {
     app.use('/', router) ;
     app.use('/api/bills', bill) ;
+    app.use('/api/departments', department) ;
 };

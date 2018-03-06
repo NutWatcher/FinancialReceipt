@@ -9,10 +9,23 @@ const Search = Input.Search;
 const {RangePicker} = DatePicker;
 import BillForm from './BillForm'
 
-const BillManage = ({ dispatch, list: dataSource, loading, total, page: current }) => {
+const BillManage = ({ dispatch, list: dataSource, loading, total, page: current, formList }) => {
   function createHandler(values) {
     dispatch({
       type: 'bills/create',
+      payload: values,
+    });
+  }
+  function updateHandler(values) {
+    dispatch({
+      type: 'bills/update',
+      payload: values,
+    });
+  }
+  function deleteHandler(values) {
+    console.log("deleteHandler in");
+    dispatch({
+      type: 'bills/delete',
       payload: values,
     });
   }
@@ -20,7 +33,7 @@ const BillManage = ({ dispatch, list: dataSource, loading, total, page: current 
     <Page>
       <Row gutter={24}>
         <Col xl={{span: 2}} md={{span: 8}}>
-          <BillForm onOk={createHandler}/>
+          <BillForm formList = {formList} onOk={createHandler}/>
         </Col>
         <Col xl={{span: 4}} md={{span: 8}} sm={{span: 12}}>
           <Search
@@ -45,14 +58,17 @@ const BillManage = ({ dispatch, list: dataSource, loading, total, page: current 
           </div>
         </Col>
       </Row>
-      <List listData = {dataSource}/>
+      <List listData = {dataSource} updateHandler={updateHandler} deleteHandler={deleteHandler}/>
     </Page>
   );
 };
 
 function mapStateToProps(state) {
-  const { list, total, page } = state.bills;
+  const { list, total, page, formList } = state.bills;
+  console.log("billsformlist");
+  console.log(formList);
   return {
+    formList,
     list,
     total,
     page,
