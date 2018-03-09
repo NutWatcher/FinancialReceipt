@@ -50,7 +50,7 @@ class Bill {
     static GetBills(param) {
         return new Promise(async (resolve, reject) => {
             try {
-                const sqlStr = "SELECT * FROM bill order by id desc;";
+                const sqlStr = "SELECT * FROM V_bill order by id desc;";
                 console.log(sqlStr);
                 let res = await DB.queryDbPromise(sqlStr);
                 resolve(res);

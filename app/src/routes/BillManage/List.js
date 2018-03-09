@@ -28,19 +28,44 @@ const List = ({ listData, updateHandler, deleteHandler}) => {
     }
   };
   const columns = [
-    {title: '单位', dataIndex: 'companyId', key: 'companyId', render: text => <a href="#">{text}</a>},
+    {title: '单位', dataIndex: 'companyName', key: 'companyName', render: text => <a href="#">{text}</a>},
+    {title: '部门', dataIndex: 'departmentName', key: 'departmentName'},
+    {title: '事项', dataIndex: 'matter', key: 'matter'},
+    {title: '专业', dataIndex: 'profession', key: 'profession'},
     {title: '发票代码', dataIndex: 'billCode', key: 'billCode'},
     {title: '发票号码', dataIndex: 'billNumber', key: 'billNumber'},
     {title: '金额', dataIndex: 'money', key: 'money'},
     {title: '税率', dataIndex: 'taxRate', key: 'taxRate'},
     {title: '税额', dataIndex: 'tax', key: 'tax'},
     {title: '合计', dataIndex: 'total', key: 'total'},
-    {title: '入账金额', dataIndex: 'moneyIn', key: 'moneyIn'},
-    {title: '抵扣', dataIndex: 'taxDeduction', key: 'taxDeduction'},
-    {title: '转出科目', dataIndex: 'taxTurnOutSubject', key: 'taxTurnOutSubject'},
-    {title: '部门', dataIndex: 'departmentId', key: 'departmentId'},
-    {title: '来源', dataIndex: 'profession', key: 'profession'},
-    {title: '事项', dataIndex: 'matter', key: 'matter'},
+
+    {title: '税额分配',
+      key: 'suiEFenPei',
+      render: (text, record) => {
+        if (record.TurnOutDeductionRate == 1){
+          return <p>全转出</p>;
+        }
+        else if (record.TurnOutDeductionRate == 0){
+          return <span>全抵扣</span>;
+        }
+        else {
+          return <span>自定义</span>;
+        }
+      }
+    },
+    {title: '比例', key: 'TurnOutDeductionRate',
+      render: (text, record) => {
+        if (record.TurnOutDeductionRate == 0){
+          return <span>0</span>;
+        }
+        else {
+          return <span> {record.TurnOutDeductionRate * 100}%</span>;
+        }
+      }},
+    {title: '抵扣金额', dataIndex: 'taxDeduction', key: 'taxDeduction'},
+    {title: '转出金额', dataIndex: 'taxTurnOut', key: 'taxTurnOut'},
+    {title: '转出科目', dataIndex: 'taxTurnOutSubjectName', key: 'taxTurnOutSubjectName'},
+    {title: '认证时间', dataIndex: 'authenticationDate', key: 'authenticationDate'},
     {title: '备注', dataIndex: 'remark', key: 'remark'},
     {
       title: '操作',
@@ -57,7 +82,7 @@ const List = ({ listData, updateHandler, deleteHandler}) => {
             <Icon type="bars" /><Icon type="down" />
           </Button>
         </Dropdown>;
-      },
+      }
   }];
   const data = [
     {
@@ -75,7 +100,7 @@ const List = ({ listData, updateHandler, deleteHandler}) => {
     ];
   return (
     <div className={styles.list_wrap}>
-      <Table bordered scroll={{ x: '130%' }} columns={columns} dataSource={listData} />
+      <Table bordered scroll={{ x: '200%' }} columns={columns} dataSource={listData} />
     </div>
   )
 };
