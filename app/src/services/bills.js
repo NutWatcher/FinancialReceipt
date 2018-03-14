@@ -1,7 +1,19 @@
 import request from '../utils/request';
 
-export function fetch({ page }) {
-  return request(`/api/bills?_page=${page}&_limit=10`);
+export function fetch( params ) {
+  let url = '/api/bills';
+  console.log(params);
+  if (params) {
+    let paramsArray = [];
+    //拼接参数
+    Object.keys(params).forEach(key => paramsArray.push(key + '=' + params[key]));
+    if (url.search(/\?/) === -1) {
+      url += '?' + paramsArray.join('&');
+    } else {
+      url += '&' + paramsArray.join('&');
+    }
+  }
+  return request(url);
 }
 export function fetchTaxTurnOutSubjects({ page }) {
   return request(`/api/bills/taxTurnOutSubjects`);

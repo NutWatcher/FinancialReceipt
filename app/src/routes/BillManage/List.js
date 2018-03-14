@@ -1,8 +1,8 @@
 import React from 'react'
-import { Table, Icon, Divider , Dropdown, Menu, Button } from 'antd'
+import { Table, Icon, Divider , Dropdown, Menu, Button,Modal } from 'antd'
 
 import styles from './List.less';
-
+const confirm = Modal.confirm;
 const List = ({ listData, updateHandler, deleteHandler}) => {
   const dropMenu = (
     <Dropdown overlay={
@@ -24,7 +24,22 @@ const List = ({ listData, updateHandler, deleteHandler}) => {
     }
     else if (e.key == 2){
       console.log("delete");
-      deleteHandler({id: value});
+      console.log(value);
+      confirm({
+        title: '确定要删除该条记录么?',
+        content: '...',
+        okText: 'Yes',
+        okType: 'danger',
+        cancelText: 'No',
+        onOk() {
+          console.log(value);
+          deleteHandler({id: value});
+        },
+        onCancel() {
+          console.log('Cancel');
+        },
+      });
+
     }
   };
   const columns = [
@@ -98,6 +113,9 @@ const List = ({ listData, updateHandler, deleteHandler}) => {
       money: '41052.48', taxRate: '17%', taxPaid: '6978.92', total: '48031.40', moneyIn: '6978.92', isDeductible: '是',
       outSubject: '6602040201', department: '局办', item: '车修', source: '报销报账', remark: ''}
     ];
+  for(let i = 0 ; i < listData.length ; i ++){
+    listData[i].key = listData[i]["id"];
+  }
   return (
     <div className={styles.list_wrap}>
       <Table bordered scroll={{ x: '200%' }} columns={columns} dataSource={listData} />

@@ -42,9 +42,10 @@ export default {
         }
       });
     },
-    *fetch({ payload: { page = 1 } }, { call, put }) {
+    *fetch({ payload: { page = 1, options = {}  } }, { call, put }) {
       console.log("fetch in");
-      const { data, headers } = yield call(billService.fetch, { page });
+      console.log(options);
+      const { data, headers } = yield call(billService.fetch, {page, ...options});
       yield put({
         type: 'save',
         payload: {

@@ -6,6 +6,9 @@ import './index.less';
 const app = dva({
   history: browserHistory,
   initialState: {
+    company:{
+      list:[]
+    },
      bills: {
        formList:{
          departmentList:[],
@@ -35,8 +38,10 @@ const app = dva({
 // app.model(require('./models/example'));
 let bills = require('./models/bills');
 let globe = require('./models/globe');
+let company = require('./models/company');
 app.model(globe);
 app.model(bills);
+app.model(company);
 // 4. Router
 app.router(require('./router'));
 

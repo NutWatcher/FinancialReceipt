@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import styles from './BillForm.less';
 import { Modal, Button } from 'antd';
 import { Form, Input, Switch, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, AutoComplete, Radio  } from 'antd';
+import company from "../../models/company";
 const FormItem = Form.Item;
 const { TextArea } = Input;
 const RadioButton = Radio.Button;
@@ -17,6 +18,45 @@ const formItemTwoLayout = {
   labelCol: { span: 12 },
   wrapperCol: { span: 12 },
 };
+class SelectTagInput extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state={
+      Svalue:this.props.value
+    }
+  }
+  handleSelectChange = (value) => {
+    //this.props.onChange(value);
+    //this.setState({ Svalue: value });
+    this.props.searchCompanyHandler(value);
+  };
+  handleSelect = (value) => {
+    console.log("handleSelect");
+    console.log(value);
+    this.props.onChange(value);
+    //this.setState({ Svalue: value });
+    //this.props.searchCompanyHandler(value);
+  };
+  render() {
+    return (
+      <span>
+        <Select
+          mode="combobox"
+          value={this.state.Svalue}
+          style={{ width: '100%' }}
+          onChange={this.handleSelectChange}
+          onSelect={this.handleSelect}
+        >
+          {
+            this.props.options.map((value , index) => {
+              return  <Option key={index} value={value.name}>{value.name}</Option>
+            })
+          }
+        </Select>
+      </span>
+    );
+  }
+}
 class SelectInput extends React.Component {
   constructor(props) {
     super(props);
@@ -72,10 +112,10 @@ class CollectionForm extends Component{
     this.setState(param);
   };
   render() {
-    const { visible, onCancel, onCreate, form, formList } = this.props;
+    const { visible, onCancel, onCreate, form, formList, companyList, searchCompanyHandler } = this.props;
     const { getFieldDecorator } = form;
-    console.log("formlist");
-    console.log(formList);
+    console.log("companyList");
+    console.log(companyList);
     return (
       <Modal width={900} visible={visible} style={{ top: 20 }}
         title="新增台账" okText="新增"
@@ -86,9 +126,10 @@ class CollectionForm extends Component{
             <Col span={10} >
               <FormItem  label="公司名称" {...formItemTwoLayout}>
                 {getFieldDecorator('company', {
+                  initialValue: null,
                   rules: [{ required: true, message: '请输入..' }],
                 })(
-                  <Input />
+                  <SelectTagInput options={companyList} searchCompanyHandler={searchCompanyHandler}/>
                 )}
               </FormItem>
             </Col>
@@ -263,6 +304,8 @@ class BillForm extends Component{
       <div>
         <Button type="primary" onClick={this.showModal}><Icon type="plus" />新增</Button>
         <CollectionCreateForm
+          companyList={this.props.companyList}
+          searchCompanyHandler={this.props.searchCompanyHandler}
           formList={this.props.formList}
           ref={this.saveFormRef}
           visible={this.state.visible}

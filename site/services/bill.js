@@ -49,8 +49,43 @@ class Bill {
     };
     static GetBills(param) {
         return new Promise(async (resolve, reject) => {
+            let page = param.page || 1;
+            let limit = param.limit || 10;
+            let options = [];
+            console.log(param);
             try {
-                const sqlStr = "SELECT * FROM V_bill order by id desc;";
+                for(let key in param){
+                    if (key == "page" || key == "limit"){ continue ;}
+                    if (param[key] == ""){ continue ;}
+                    options.push({name:key, value:param[key]});
+                }
+                console.log(options);
+                let sqlStr = "SELECT * FROM V_bill order by id desc;";
+                if (options.length == 0 ){
+                    sqlStr = "SELECT * FROM V_bill order by id desc;";
+                }
+                else {
+                    if (options[0].name == 'company'){
+                        let tempValue = mysql.format("?", `%${options[0]["value"]}%`);
+                        sqlStr = `SELECT * FROM V_bill where companyName like ${tempValue} order by id desc;`;
+                    }
+                    else if (options[0].name == 'profession'){
+                        let tempValue = mysql.format("?", `%${options[0]["value"]}%`);
+                        sqlStr = `SELECT * FROM V_bill where profession like ${tempValue} order by id desc;`;
+                    }
+                    else if (options[0].name == 'department'){
+                        let tempValue = mysql.format("?", `%${options[0]["value"]}%`);
+                        sqlStr = `SELECT * FROM V_bill where departmentName like ${tempValue} order by id desc;`;
+                    }
+                    else if (options[0].name == 'billCode'){
+                        let tempValue = mysql.format("?", `%${options[0]["value"]}%`);
+                        sqlStr = `SELECT * FROM V_bill where billCode =  ${tempValue} order by id desc;`;
+                    }
+                    else if (options[0].name == 'billNumber'){
+                        let tempValue = mysql.format("?", `%${options[0]["value"]}%`);
+                        sqlStr = `SELECT * FROM V_bill where billNumber =  ${tempValue} order by id desc;`;
+                    }
+                }
                 console.log(sqlStr);
                 let res = await DB.queryDbPromise(sqlStr);
                 resolve(res);

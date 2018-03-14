@@ -43,7 +43,7 @@ router.get('/professions', async function(req, res, next) {
 router.get('/', async function(req, res, next) {
     try {
         console.log("get bills");
-        let billList = await Bill.GetBills();
+        let billList = await Bill.GetBills(req.query);
         return res.json({
             code: 1001,
             msg: "",
