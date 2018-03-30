@@ -2,15 +2,15 @@ import React from 'react';
 import { connect } from 'dva';
 import Page  from '../../components/Page/Page'
 import List from './List';
-
+import moment from 'moment';
 import {Form, Button, Row, Col, DatePicker, Input, Icon, Menu, Dropdown, Select} from 'antd'
 const Option = Select.Option;
 const Search = Input.Search;
 const InputGroup = Input.Group;
-const {RangePicker} = DatePicker;
+const { MonthPicker, RangePicker } = DatePicker;
 import BillForm from './BillForm'
 
-const BillSearchForm = ({ dispatch, formList, companyList }) => {
+const BillSearchForm = ({ dispatch, formList, companyList, closeDate }) => {
   let selectSearchValue = "company";
   function createHandler(values) {
     dispatch({
@@ -32,6 +32,15 @@ const BillSearchForm = ({ dispatch, formList, companyList }) => {
     dispatch({
       type: 'company/fetch',
       payload: values,
+    });
+  }
+  function closeDateChangeHandler(valueMoment, str) {
+    console.log("closeDate");
+    //console.log(values);
+    console.log(str);
+    dispatch({
+      type: 'bills/setCloseDate',
+      payload: str,
     });
   }
   function deleteHandler(values) {
@@ -71,7 +80,15 @@ const BillSearchForm = ({ dispatch, formList, companyList }) => {
             />
           </InputGroup>
         </Col>
-        <Col xl={{span: 2}} offset={10} md={{span: 14}} sm={{span: 14}}>
+        <Col xl={{span: 8}} offset={3} md={{span: 14}} sm={{span: 14}}>
+          <div style={{display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap'}}>
+            <div>
+              <span style={{"color":"red",fontSize:"16px"}}>数据截断日期 : </span>
+              <MonthPicker onChange={closeDateChangeHandler} value={moment(closeDate, 'YYYY/MM')} format={'YYYY/MM'} />
+            </div>
+          </div>
+        </Col>
+        <Col xl={{span: 2}} offset={0} md={{span: 14}} sm={{span: 14}}>
           <div style={{display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap'}}>
             <div>
               <Button >导出数据</Button>

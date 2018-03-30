@@ -24,6 +24,9 @@ export function fetchProfessions({ page }) {
 export function fetchDepartments({ page }) {
   return request(`/api/departments`);
 }
+export function fetchCloseDate() {
+  return request(`/api/bills/closeDate`);
+}
 
 export function create(values) {
   return request('/api/bills', {
@@ -46,6 +49,15 @@ export function update(values) {
 export function del(values) {
   return request('/api/bills', {
     method: 'delete',
+    headers:{
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(values),
+  });
+}
+export function setCloseDate(values) {
+  return request('/api/bills/closeDate', {
+    method: 'POST',
     headers:{
       "Content-Type": "application/json"
     },

@@ -4,6 +4,7 @@ export default {
   namespace: 'bills',
   state: {
     list: [],
+    closeDate:'2000/01',
     formList:{
       departmentsList:[],
       taxTurnOutSubjectsList:[],
@@ -20,9 +21,13 @@ export default {
       console.log("save in");
       return { ...state, list, total, page };
     },
-    initFormList(state, { payload: { formList: formList } }) {
+    initFormList(state, { payload: { formList: formList, closeDate } }) {
       console.log("initFormList in");
-      return { ...state, formList };
+      return { ...state, formList, closeDate };
+    },
+    saveCloseDate(state, { payload: { closeDate } }) {
+      console.log("saveCloseDate in");
+      return { ...state, closeDate };
     }
   },
   effects: {
@@ -31,9 +36,11 @@ export default {
       const { data: professionsList, headers } = yield call(billService.fetchProfessions, {page: 1});
       const { data: departmentsList } = yield call(billService.fetchDepartments, {page: 1});
       const { data: taxTurnOutSubjectsList } = yield call(billService.fetchTaxTurnOutSubjects, {page: 1});
+      const { data: closeDate } = yield call(billService.fetchCloseDate);
       yield put({
         type: 'initFormList',
         payload: {
+          closeDate: closeDate.closeDate,
           formList: {
             professionsList: professionsList.professionsList,
             departmentsList: departmentsList.departmentsList,
@@ -77,6 +84,20 @@ export default {
       console.log(value);
       yield put({ type: 'globe/showSuccess', success: "删除成功" });
       yield put({ type: 'fetch', payload:{page:1}});
+    },
+    *setCloseDate({ payload: closeDate }, { call, put }) {
+      console.log("setCloseDate in");
+      console.log(closeDate);
+      let value = yield call(billService.setCloseDate, {closeDate:closeDate});
+      console.log(value);
+      yield put({ type: 'globe/showSuccess', success: "设置成功" });
+      yield put({ type: 'fetchCloseDate'});
+    },
+    *fetchCloseDate({ }, { call, put }) {
+      console.log("fetchCloseDate in");
+      const { data: closeDate } = yield call(billService.fetchCloseDate);
+      console.log(closeDate);
+      yield put({ type: 'saveCloseDate',  payload: {closeDate: closeDate.closeDate} });
     }
   },
   subscriptions: {

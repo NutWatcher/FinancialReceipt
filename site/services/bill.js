@@ -5,17 +5,20 @@ class Bill {
     constructor(){}
     static AddBill(param) {
         return new Promise(async (resolve, reject) => {
+            console.log(param);
             try {
                 const sql = "INSERT INTO `bill` " +
-                    "(`companyId`, `departmentId`, `matter`, `profession`, `billCode`, `billNumber`, `money`, `tax`, `taxRate`, `total`, `remark`, `taxTurnOut`, `taxTurnOutSubject`, `taxDeduction`, `TurnOutDeductionRate`)" +
+                    "(`companyId`, `departmentId`, `matter`, `profession`, `billCode`, `billNumber`," +
+                    " `money`, `tax`, `taxRate`, `total`, `remark`, " +
+                    "`taxTurnOut`, `taxTurnOutSubjectId`, `taxDeduction`, `TurnOutDeductionRate`)" +
                     " VALUES (? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,? );";
                 const {
-                    company, department, matter, profession,
+                    companyId, department, matter, profession,
                     billCode, billNumber, money, rax, raxRate, total,
                     remark, taxTurnOut, taxTurnOutSubject, taxDeduction, TurnOutDeductionRate
                 } = param;
                 let values = [
-                    company, department, matter, profession,
+                    companyId, department, matter, profession,
                     billCode, billNumber, money, rax, raxRate, total,
                     remark, taxTurnOut, taxTurnOutSubject, taxDeduction, TurnOutDeductionRate
                 ];
@@ -78,11 +81,11 @@ class Bill {
                         sqlStr = `SELECT * FROM V_bill where departmentName like ${tempValue} order by id desc;`;
                     }
                     else if (options[0].name == 'billCode'){
-                        let tempValue = mysql.format("?", `%${options[0]["value"]}%`);
+                        let tempValue = mysql.format("?", `${options[0]["value"]}`);
                         sqlStr = `SELECT * FROM V_bill where billCode =  ${tempValue} order by id desc;`;
                     }
                     else if (options[0].name == 'billNumber'){
-                        let tempValue = mysql.format("?", `%${options[0]["value"]}%`);
+                        let tempValue = mysql.format("?", `${options[0]["value"]}`);
                         sqlStr = `SELECT * FROM V_bill where billNumber =  ${tempValue} order by id desc;`;
                     }
                 }
@@ -124,5 +127,36 @@ class Bill {
             }
         });
     };
+
+    static GetCloseTime(){
+        return new Promise(async (resolve, reject) => {
+            try {
+                let sqlStr = "SELECT * FROM close_date order by id  desc  limit 1;";
+                console.log(sqlStr);
+                let res = await DB.queryDbPromise(sqlStr);
+                resolve(res[0]);
+            }
+            catch (e){
+                console.log(e.stack);
+                reject(e);
+            }
+        });
+    }
+    static SetCloseTime(param){
+        return new Promise(async (resolve, reject) => {
+            try {
+                const tempSql = "INSERT INTO `financial_receipt`.`close_date` (`date`) VALUES ( ? );";
+                let values = [param];
+                let sqlStr = mysql.format(tempSql, values);
+                console.log(sqlStr);
+                let res = await DB.queryDbPromise(sqlStr);
+                resolve(res);
+            }
+            catch (e){
+                console.log(e.stack);
+                reject(e);
+            }
+        });
+    }
 }
 module.exports = Bill;

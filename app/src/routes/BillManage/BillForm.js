@@ -22,13 +22,15 @@ class SelectTagInput extends React.Component {
   constructor(props) {
     super(props);
     this.state={
-      Svalue:this.props.value
+      opValue:this.props.value || "",
+      Svalue:this.props.value || ""
     }
   }
   handleSelectChange = (value) => {
     //this.props.onChange(value);
     //this.setState({ Svalue: value });
     this.props.searchCompanyHandler(value);
+    this.setState({opValue:value,Svalue:value});
   };
   handleSelect = (value) => {
     console.log("handleSelect");
@@ -47,9 +49,10 @@ class SelectTagInput extends React.Component {
           onChange={this.handleSelectChange}
           onSelect={this.handleSelect}
         >
+          <Option key={0} value={this.state.opValue}>{this.state.opValue}</Option>
           {
             this.props.options.map((value , index) => {
-              return  <Option key={index} value={value.name}>{value.name}</Option>
+              return  <Option key={index+1} value={value.name}>{value.name}</Option>
             })
           }
         </Select>
@@ -66,19 +69,15 @@ class SelectInput extends React.Component {
   };
   render() {
     return (
-      <span>
-        <Select
-          value={this.props.value}
-          style={{ width: '100%' }}
-          onChange={this.handleSelectChange}
-        >
-          {
-            this.props.options.map((value , index) => {
-              return  <Option key={index} value={value.id}>{value.name}</Option>
-            })
-          }
-        </Select>
-      </span>
+      <Select
+        style={{ width: '100%'}}
+      >
+        {
+          this.props.options.map((value , index) => {
+            return  <Option key={index} value={value.id}>{value.name}</Option>
+          })
+        }
+      </Select>
     );
   }
 }
@@ -87,35 +86,66 @@ class CollectionForm extends Component{
     super(props);
     this.state = {
       RaxDistribution: "",
-      showOutMoney: false,
-      showDeductible: false
+      currentTax:"",
+      currentTaxRate:""
     };
-  }
-  changeRaxDistribution = (e) => {
-    console.log('radio checked', e.target.value);
+  };
+  changeTaxTurnOut = (e) => {
+    let v = +e.target.value ;
+    let taxTurnOut = v.toFixed(2);
+    let taxDeduction = (this.state.currentTax - v).toFixed(2);
+    this.props.form.setFieldsValue({taxTurnOut:v, taxDeduction});
+  };
+  changeTurnOutDeductionRate = (e) => {
     let v = e.target.value ;
-    let param = {
-      RaxDistribution: v,
-      showOutMoney: false,
-      showDeductible: false
-    };
-    if (v == "a"){
-      param.showOutMoney = true ;
-    }
-    else if (v == "b"){
-      param.showDeductible = true ;
+    let taxTurnOut = (this.state.currentTax * v).toFixed(2);
+    let taxDeduction = (this.state.currentTax - taxTurnOut).toFixed(2);
+    this.props.form.setFieldsValue({taxTurnOut, taxDeduction});
+  };
+  changeCurrentRax = ( param, e) => {
+    console.log('changeCurrentRax', e.target.value);
+    let v = e.target.value ;
+    let vv = this.props.form.getFieldsValue(['money','tax']);
+    console.log(vv);
+    let currentTaxRate = "0";
+    if (param == 'money'){
+      currentTaxRate = vv['tax']/v;
     }
     else {
-      param.showDeductible = true ;
-      param.showOutMoney = true ;
+      this.state.currentTax = v ;
+      currentTaxRate = v/vv['money'];
+      let taxTurnOut = v;
+      let taxDeduction = v;
+      if (this.state.RaxDistribution == 'c'){
+        taxTurnOut = this.props.form.getFieldsValue(['taxTurnOut'])['taxTurnOut'];
+        taxDeduction = v-taxTurnOut;
+      }
+      else if (this.state.RaxDistribution == 'd'){
+        let TurnOutDeductionRate = this.props.form.getFieldsValue(['TurnOutDeductionRate'])['TurnOutDeductionRate'];
+        taxTurnOut = (TurnOutDeductionRate * v).toFixed(2);
+        taxDeduction = (v - taxTurnOut).toFixed(2);
+      }
+      this.props.form.setFieldsValue({taxTurnOut, taxDeduction});
     }
-    this.setState(param);
+    this.setState({currentTaxRate, currentTax: this.state.currentTax});
+  };
+  changeRaxDistribution = (e) => {
+    console.log('radio checked', e.target.value);
+    let RaxDistribution = e.target.value ;
+    let taxTurnOut = this.state.currentTax;
+    let taxDeduction = this.state.currentTax;
+    if(RaxDistribution == 'c' || RaxDistribution =='d'){
+      taxTurnOut = "";
+      taxDeduction = "";
+    }
+    this.props.form.setFieldsValue({taxTurnOut, taxDeduction});
+    this.setState({RaxDistribution});
   };
   render() {
     const { visible, onCancel, onCreate, form, formList, companyList, searchCompanyHandler } = this.props;
     const { getFieldDecorator } = form;
-    console.log("companyList");
-    console.log(companyList);
+    //console.log("companyList");
+    //console.log(companyList);
     return (
       <Modal width={900} visible={visible} style={{ top: 20 }}
         title="新增台账" okText="新增"
@@ -177,24 +207,39 @@ class CollectionForm extends Component{
             <Col span={10} >
               <FormItem label="金额" {...formItemTwoLayout}>
                 {getFieldDecorator('money', {
-                  rules: [{ required: true, message: '请输入..' }],
-                })(<Input  />)}
+                  rules: [
+                    { required: true, message: '请输入数字类型',
+                      validator: (rule, value, cb) => ( !isNaN(value) ? cb() : cb(true))}],
+                })(<Input  onChange={this.changeCurrentRax.bind(this, 'money')} />)}
               </FormItem></Col>
             <Col span={10} >
               <FormItem label="税额" {...formItemTwoLayout}>
-                {getFieldDecorator('rax', {
-                  rules: [{ required: true, message: '请输入..' }],
-                })(<Input  />)}
+                {getFieldDecorator('tax', {
+                  rules: [
+                    { required: true, message: '请输入数字类型',
+                      validator: (rule, value, cb) => ( !isNaN(value) ? cb() : cb(true))}],
+                })(<Input  onChange={this.changeCurrentRax.bind(this, 'tax')}/>)}
               </FormItem>
             </Col>
           </Row>
           <Row gutter={8}>
             <Col span={10} >
               <FormItem label="税率" {...formItemTwoLayout}>
-                {getFieldDecorator('raxRate', {
+                {getFieldDecorator('taxRate', {
                   rules: [{ required: true, message: '请输入..' }],
-                })(<Input  />)}
+                })(
+                  <SelectInput options={[
+                    {name:"1.5%",id:"1.5%"},
+                    {name:"3%",id:"3%"},
+                    {name:"5%",id:"5%"},
+                    {name:"6%",id:"6%"},
+                    {name:"11%",id:"11%"},
+                    {name:"12%",id:"12%"},
+                    {name:"17%",id:"17%"}
+                  ]}/>)}
+                <span>{this.state.currentTaxRate}</span>
               </FormItem>
+
             </Col>
             <Col span={10} >
               <FormItem label="合计" {...formItemTwoLayout}>
@@ -205,22 +250,28 @@ class CollectionForm extends Component{
             </Col>
           </Row>
           <FormItem label="税额分配" {...formItemLayout}>
-            <RadioGroup onChange={this.changeRaxDistribution} value={this.state.RaxDistribution}>
-              <RadioButton  value="a">全转出</RadioButton >
-              <RadioButton  value="b">全抵扣</RadioButton >
-              <RadioButton  value="c">自定义</RadioButton >
-              <RadioButton  value="d">按比例</RadioButton >
-            </RadioGroup>
+            {getFieldDecorator('TaxDistribution', {
+              rules: [{ required: true, message: '请输入..' }],
+            })(
+              <RadioGroup onChange={this.changeRaxDistribution} >
+                <RadioButton  value="a">全转出</RadioButton >
+                <RadioButton  value="b">全抵扣</RadioButton >
+                <RadioButton  value="c">自定义</RadioButton >
+                <RadioButton  value="d">按比例</RadioButton >
+              </RadioGroup>
+            )}
           </FormItem>
-
           {
-            this.state.showOutMoney ?
+            this.state.RaxDistribution != 'b' &&  this.state.RaxDistribution != '' ?
               <Row gutter={8}>
                 <Col span={10} >
                   <FormItem label="转出金额" {...formItemTwoLayout}>
                     {getFieldDecorator('taxTurnOut', {
-                      rules: [{ required: true, message: '请输入..' }],
-                    })(<Input  />)}
+                      initialValue:this.state.RaxDistribution == 'a' ? this.state.currentTax : 0,
+                      rules: [{ required: true, message: '请输入数字类型参数',
+                      validator: (rule, value, cb) => ( !isNaN(value) ? cb() : cb(true))}],
+                    })(<Input disabled={this.state.RaxDistribution != 'c'}
+                              onChange={this.changeTaxTurnOut}/>)}
                   </FormItem>
                 </Col>
                 <Col span={10} >
@@ -234,23 +285,25 @@ class CollectionForm extends Component{
               : null
           }
           {
-            this.state.showDeductible ?
+            this.state.RaxDistribution != 'a' &&  this.state.RaxDistribution != ''?
               <Row gutter={8}>
                 <Col span={10} >
                   <FormItem label="抵扣金额" {...formItemTwoLayout}>
                     {getFieldDecorator('taxDeduction', {
+                      initialValue:this.state.RaxDistribution == 'b' ? this.state.currentTax : 0,
                       rules: [{ required: true, message: '请输入..' }],
-                    })(<Input />)}
+                    })(<Input disabled={true}/>)}
                   </FormItem>
                 </Col>
                 <Col span={10} >
-                  {
-                    this.state.showDeductible & this.state.showOutMoney ?
-                      <FormItem label="比例" {...formItemTwoLayout}>
-                        {getFieldDecorator('TurnOutDeductionRate', {
-                          rules: [{ required: true, message: '请输入..' }],
-                        })(<Input  />)}
-                      </FormItem>
+                  { this.state.RaxDistribution == 'd' ?
+                    <FormItem label="比例" {...formItemTwoLayout}>
+                      {getFieldDecorator('TurnOutDeductionRate', {
+                        rules: [{required: true, message: '请输入数字类型参数',
+                          validator: (rule, value, cb) => ( !isNaN(value) ? cb() : cb(true))}],
+                      })(<Input disabled={this.state.RaxDistribution != 'd'}
+                                onChange={this.changeTurnOutDeductionRate}/>)}
+                    </FormItem>
                     : null
                   }
                 </Col>

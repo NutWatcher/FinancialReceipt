@@ -1,29 +1,30 @@
 import dva from 'dva';
-import { browserHistory } from 'dva/router';
-import { message, Button } from 'antd';
+import {browserHistory} from 'dva/router';
+import {message, Button} from 'antd';
 import './index.less';
 
 const app = dva({
   history: browserHistory,
   initialState: {
-    company:{
-      list:[]
+    company: {
+      list: []
     },
-     bills: {
-       formList:{
-         departmentList:[],
-         taxTurnOutSubjectsList:[],
-         professionsList:[]
-       },
-       list: [],
-       total: null,
-       page: null,
-     },
-    globe:{
+    bills: {
+      closeDate: '2000/01',
+      formList: {
+        departmentList: [],
+        taxTurnOutSubjectsList: [],
+        professionsList: []
+      },
+      list: [],
+      total: null,
+      page: null,
+    },
+    globe: {
       success: "",
       error: ""
     }
-   },
+  },
   onError(e) {
     console.log(e);
     console.log(e.msg);
