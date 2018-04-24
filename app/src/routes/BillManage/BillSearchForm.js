@@ -8,9 +8,10 @@ const Option = Select.Option;
 const Search = Input.Search;
 const InputGroup = Input.Group;
 const { MonthPicker, RangePicker } = DatePicker;
-import BillForm from './BillForm'
+import BillForm from './BillForm';
+import Export from '../../components/BillForm/Export';
 
-const BillSearchForm = ({ dispatch, formList, companyList, closeDate }) => {
+const BillSearchForm = ({ report, dispatch, formList, companyList, closeDate }) => {
   let selectSearchValue = "company";
   function createHandler(values) {
     dispatch({
@@ -91,7 +92,7 @@ const BillSearchForm = ({ dispatch, formList, companyList, closeDate }) => {
         <Col xl={{span: 2}} offset={0} md={{span: 14}} sm={{span: 14}}>
           <div style={{display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap'}}>
             <div>
-              <Button >导出数据</Button>
+              <Export report={report} dispatch={dispatch}>导出数据</Export>
             </div>
           </div>
         </Col>

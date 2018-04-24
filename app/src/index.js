@@ -9,8 +9,13 @@ const app = dva({
     company: {
       list: []
     },
+    report:{
+      fileName: "",
+      fileUrl:"",
+      fileState: "start"
+    },
     bills: {
-      closeDate: '2000/01',
+      closeDate: '2000-01',
       formList: {
         departmentList: [],
         taxTurnOutSubjectsList: [],
@@ -40,9 +45,11 @@ const app = dva({
 let bills = require('./models/bills');
 let globe = require('./models/globe');
 let company = require('./models/company');
+let report = require('./models/report');
 app.model(globe);
 app.model(bills);
 app.model(company);
+app.model(report);
 // 4. Router
 app.router(require('./router'));
 

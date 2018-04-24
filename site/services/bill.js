@@ -99,6 +99,51 @@ class Bill {
             }
         });
     };
+    static GetBillsGroupByTurnOutSubject(param) {
+        return new Promise(async (resolve, reject) => {
+            console.log('GetBillsGroupByTurnOutSubject');
+            console.log(param);
+            try {
+                // let insSql = " and b.departmentId != '14' " ;
+                // if (param["department"] == 'other'){
+                //     insSql = "" ;
+                // }
+                let tempSql = "SELECT s.name as name, taxTurnOutSubjectId as id, sum(b.taxTurnOut) as sum " +
+                    "FROM bill as b left join bill_taxTurnOutSubject as s on b.taxTurnOutSubjectId = s.id " +
+                    `where authenticationDate = ?  and b.taxTurnOutSubjectId is not null and b.departmentId = '14' ` +
+                    "group by b.taxTurnOutSubjectId ;";
+                let value = [param["date"]] ;
+                let strSql = mysql.format(tempSql, value) ;
+                console.log(strSql);
+                let centerRes = await DB.queryDbPromise(strSql);
+
+                tempSql = "SELECT s.name as name, taxTurnOutSubjectId as id, sum(b.taxTurnOut) as sum " +
+                    "FROM bill as b left join bill_taxTurnOutSubject as s on b.taxTurnOutSubjectId = s.id " +
+                    `where authenticationDate = ? and b.taxTurnOutSubjectId is not null and b.departmentId != '14'` +
+                    "group by b.taxTurnOutSubjectId ;";
+                value = [param["date"]] ;
+                strSql = mysql.format(tempSql, value) ;
+                console.log(strSql);
+                let ownRes = await DB.queryDbPromise(strSql);
+
+                let resValue = {
+                    centerDepartment:[],
+                    ownDepartment:[]
+                };
+                for (let i = 0 ; i < ownRes.length ; i ++){
+                    resValue.ownDepartment.push([ownRes[i].name, ownRes[i].sum])
+                }
+                for (let i = 0 ; i < centerRes.length ; i ++){
+                    resValue.centerDepartment.push([centerRes[i].name, centerRes[i].sum])
+                }
+                resolve(resValue);
+            }
+            catch (e){
+                console.log(e.stack);
+                reject(e);
+            }
+        });
+    };
     static GetProfessions(param) {
         return new Promise(async (resolve, reject) => {
             try {

@@ -111,6 +111,7 @@ router.get('/', async function(req, res, next) {
 });
 router.put('/', async (req, res, next) => {
     console.log("put in");
+    console.log(req.body);
     return res.json({
         code: 1001,
         msg: "已修改",
